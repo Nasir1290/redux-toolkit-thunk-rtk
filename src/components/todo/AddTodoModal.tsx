@@ -13,20 +13,6 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 
 const AddTodoModal = () => {
-  const [task, setTask] = useState('');
-  const [description, setDescription] = useState('');
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    const randomString = Math.random().toString(36).substring(2, 7);
-
-    const taskDetails = {
-      id: randomString,
-      title: task,
-      description: description,
-    };
-  };
 
   return (
     <Dialog>
