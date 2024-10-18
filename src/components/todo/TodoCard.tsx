@@ -1,17 +1,21 @@
+import { useAppDispatch } from '@/redux/hooks';
 import { Button } from '../ui/button';
-import {  TTodo } from '@/redux/features/todoSlice';
+import { deleteTodo, TTodo, toggleComplete } from '@/redux/features/todoSlice';
 
 
-const TodoCard:React.FC<{item:TTodo,onEdit:(item:TTodo) =>TTodo}> = ({ item ,onEdit}) => {
+const TodoCard: React.FC<{ item: TTodo, onEdit: (item: TTodo) => TTodo }> = ({ item, onEdit }) => {
+  const dispatch = useAppDispatch();
   const toggleState = () => {
-    console.log('Toggle');
+    dispatch(toggleComplete(item._id as string));
   };
 
   return (
     <div className="bg-white rounded-md flex justify-between items-center p-3 border">
       <input
+      className='cursor-pointer'
         onChange={toggleState}
         type="checkbox"
+        checked={item.isCompleted}
         name="complete"
         id="complete"
       />
@@ -25,10 +29,12 @@ const TodoCard:React.FC<{item:TTodo,onEdit:(item:TTodo) =>TTodo}> = ({ item ,onE
         )}
       </div>
       <p>{item.description}</p>
+      <p>{item.priority}</p>
       <div className="space-x-5">
         <Button className="bg-red-500">
           <svg
             className="size-5"
+            onClick={() => dispatch(deleteTodo(item._id as string))}
             fill="none"
             strokeWidth="1.5"
             stroke="currentColor"
@@ -43,8 +49,8 @@ const TodoCard:React.FC<{item:TTodo,onEdit:(item:TTodo) =>TTodo}> = ({ item ,onE
           </svg>
         </Button>
         <Button
-        onClick={() =>onEdit(item)}
-        className="bg-[#5C53FE]"
+          onClick={() => onEdit(item)}
+          className="bg-[#5C53FE]"
         >
           <svg
             className="size-5"

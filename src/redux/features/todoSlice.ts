@@ -1,11 +1,11 @@
-import { TTodo } from "@/redux/features/todoSlice";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type TTodo = {
-  id?: string;
+  _id?: string;
   title: string;
   description: string;
   isCompleted?: boolean;
+  priority: string;
 };
 
 type TInitialState = {
@@ -23,18 +23,30 @@ const todoSlice = createSlice({
     addTodo: (state, action: PayloadAction<TTodo>) => {
       state.todos.push({
         ...action.payload,
-        id: crypto.randomUUID(),
         isCompleted: false,
       });
     },
 
     deleteTodo: (state, action: PayloadAction<string>) => {
-      state.todos = state.todos.filter((todo) => todo.id !== action.payload);
+      state.todos = state.todos.filter((todo) => todo._id !== action.payload);
     },
+
     editTodo: (state, action: PayloadAction<TTodo>) => {
       state.todos = state.todos.map((todo) => {
-        if (todo.id === action.payload.id) {
+        if (todo._id === action.payload._id) {
           return action.payload;
+        }
+        return todo;
+      });
+    },
+
+    toggleComplete: (state, action: PayloadAction<string>) => {
+      state.todos = state.todos.map((todo) => {
+        if (todo._id === action.payload) {
+          return {
+            ...todo,
+            isCompleted: !todo.isCompleted,
+          };
         }
         return todo;
       });
@@ -44,4 +56,5 @@ const todoSlice = createSlice({
 
 export default todoSlice.reducer;
 
-export const { addTodo, deleteTodo,editTodo } = todoSlice.actions;
+export const { addTodo, deleteTodo, editTodo, toggleComplete } =
+  todoSlice.actions;
